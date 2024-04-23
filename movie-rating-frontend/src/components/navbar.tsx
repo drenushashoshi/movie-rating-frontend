@@ -11,6 +11,7 @@ export const Navbar = () => {
                 Rated
             </Menu.Item>
             <Menu.Menu position="right">
+                <Menu.Item as={Link} to="/auth/Login" style={{ fontSize: "1.3rem" }}>Login</Menu.Item>
                 <Menu.Item as={Link} to="/auth" style={{ fontSize: "1.3rem" }}>Register</Menu.Item>
             </Menu.Menu>
         </Menu>
