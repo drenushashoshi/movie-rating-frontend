@@ -1,10 +1,12 @@
 import { useState } from 'react';
+
 import { Grid, Header, Form, Segment, Button, Message } from 'semantic-ui-react';
 import { useMutation } from '@tanstack/react-query';
 import { mutationLogin } from "./mutation";
-import { redirect } from 'react-router-dom';
+
 
 export const Login = () => {
+    
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
     const [error, setError] = useState(null);
@@ -21,11 +23,15 @@ export const Login = () => {
         try {
             setError(null);
             await mutate({ username, password });
-            redirect("/Home")
+            
+           
         } catch (error: any) {
             setError(error);
         }
+        
     };
+    
+
 
     return (
         <Grid textAlign="center" verticalAlign="middle" style={{ height: '100vh' }}>
