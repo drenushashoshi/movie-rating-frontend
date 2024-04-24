@@ -2,6 +2,8 @@ import { Card, Image } from 'semantic-ui-react';
 import { useEffect, useState } from 'react';
 import { fetchMovieData } from './mutations';
 import { MovieData } from './mutations';
+import { Link } from 'react-router-dom';
+
 export const MovieList = () => {
     const [movies, setMovies] = useState<MovieData[]>([]);
 
@@ -21,17 +23,19 @@ export const MovieList = () => {
     return (
         <Card.Group>
             {movies.map((movie) => (
-                <Card key={movie.id}>
-                    <Image src={movie.coverImageUrl} wrapped ui={false} />
-                    <Card.Content>
-                        <Card.Header>{movie.title}</Card.Header>
-                        <Card.Meta>{movie.year}</Card.Meta>
-                        <Card.Description>{movie.description}</Card.Description>
-                    </Card.Content>
-                    <Card.Content extra>
-                        <p>Average Rating: {movie.avgRating}</p>
-                    </Card.Content>
-                </Card>
+                <Link to={`/movie/${encodeURIComponent(movie.title)}`} key={movie.id}>
+                    <Card>
+                        <Image src={movie.coverImageUrl} wrapped ui={false} />
+                        <Card.Content>
+                            <Card.Header>{movie.title}</Card.Header>
+                            <Card.Meta>{movie.year}</Card.Meta>
+                            <Card.Description>{movie.description}</Card.Description>
+                        </Card.Content>
+                        <Card.Content extra>
+                            <p>Average Rating: {movie.avgRating}</p>
+                        </Card.Content>
+                    </Card>
+                </Link>
             ))}
         </Card.Group>
     );
