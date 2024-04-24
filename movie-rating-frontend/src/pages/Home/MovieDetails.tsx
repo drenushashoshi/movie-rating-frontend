@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useParams } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
 import { fetchMovieDetailsByTitle, addRatingAndCommentToBackend, MovieData, fetchRatingsByUserId, RatingData } from './mutations';
 import { Card, Loader, Button, Comment, Form, Header, Grid, Rating, RatingProps } from 'semantic-ui-react';
 import { getUserIdFromToken } from '../../Variables'; // Importing the getUserIdFromToken function
@@ -14,6 +14,8 @@ const MovieDetail = () => {
     const [userId, setUserId] = useState<string | null>(null);
     const [userAlreadyRated, setUserAlreadyRated] = useState<boolean>(false);
     const [fetchingUserRatings, setFetchingUserRatings] = useState<boolean>(false);
+    const [commentError, setCommentError] = useState<string>('');
+    const [ratingError, setRatingError] = useState<string>('');
 
     useEffect(() => {
         const fetchData = async () => {
@@ -62,10 +64,14 @@ const MovieDetail = () => {
                 return;
             }
             else{
-            if (userRating === null || newComment.trim() === '') {
-                console.error('Rating or comment is missing');
-                return;
-            }
+                if (userRating === null) {
+                    setRatingError('Please provide a rating.');
+                    return;
+                }
+                if (newComment.trim() === '') {
+                    setCommentError('Please provide a comment.');
+                    return;
+                }
 
             // Send rating and comment data to the backend
             const { response } = await addRatingAndCommentToBackend(movieDetail?.id || '', userId || '', userRating, newComment);
@@ -123,23 +129,32 @@ const MovieDetail = () => {
                                             maxRating={10}
                                             onRate={handleRatingChange}
                                         />
+                                            {ratingError && <div style={{ color: 'red' }}>{ratingError}</div>}
                                         <Form.TextArea
                                             placeholder='Add your comment...'
                                             value={newComment}
                                             onChange={(e) => setNewComment(e.target.value)}
                                         />
+                                            {commentError && <div style={{ color: 'red' }}>{commentError}</div>}
                                         <Button content='Submit' primary />
                                     </Form>
                                 )}    
                                 {userAlreadyRated && (
                                     <div>
                                         <p>You've already rated this movie.</p>
-                                        <Button content='Edit Rating' primary onClick={handleEditRatingClick} />
+                                        <Button as={Link} to="/ratings" content='Edit Your Ratings' primary />
                                     </div>
                                 )}
                             </Comment.Group>
                         </Card.Content>
                     </Card>
+                </Grid.Column>
+                <Grid.Column>
+                {movieDetail.coverImageUrl && (
+                <div className="ui medium image">
+                    <img src={movieDetail.coverImageUrl} alt={movieDetail.title} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                </div>
+            )}
                 </Grid.Column>
             </Grid.Row>
         </Grid>
