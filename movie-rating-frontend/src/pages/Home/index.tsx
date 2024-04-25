@@ -31,7 +31,8 @@ export const MovieList = () => {
         <Grid columns={4} stackable>
             {movies.map((movie) => (
 
-                <Grid.Column style = {{zIndex:'0'}} key={movie.id}>
+
+                <Grid.Column key={movie.id}>
                     <Link to={`/movie/${encodeURIComponent(movie.title)}`} key={movie.id}>
                     <Card
                         onMouseEnter={() => handleCardHover(movie.id)}
@@ -84,6 +85,8 @@ export const MovieList = () => {
                     </Card>
                     </Link>
                 </Grid.Column>
+               
+
                
             ))}
         </Grid>
