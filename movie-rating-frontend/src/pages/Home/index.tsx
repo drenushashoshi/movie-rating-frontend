@@ -79,7 +79,7 @@ export const MovieList = () => {
                         </Card.Content>
                         <Card.Content style={{ padding: '16px' }}>
                             <p style={{ marginTop: '8px', fontSize: '16px', color: '#333' }}>
-                                Average Rating: {movie.avgRating}
+                                Average Rating: {movie.avgRating.toFixed(1)}
                             </p>
                         </Card.Content> 
                     </Card>

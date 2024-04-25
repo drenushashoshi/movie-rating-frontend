@@ -21,7 +21,7 @@ export const Register = () => {
         try {
             setError(null);
             await mutate({ username, password, email });
-            window.location.href = "/Login";
+            
         } catch (error: any) {
             setError(error);
         }

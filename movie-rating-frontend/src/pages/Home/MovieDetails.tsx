@@ -114,7 +114,7 @@ const MovieDetail = () => {
                         <Card.Content>
                             <Card.Header>{movieDetail.title}</Card.Header>
                             <Card.Meta>
-                                Average Rating: {movieDetail.avgRating}
+                                Average Rating: {movieDetail.avgRating.toFixed(1)}
                             </Card.Meta>
                             <Card.Description>{movieDetail.description}</Card.Description>
                         </Card.Content>

@@ -22,6 +22,7 @@ export const mutationRegister = async (credentials: UserCredentials) => {
 
         const data = await res.json();
         console.log(data);
+        window.location.href = "/auth/Login";
 
         return data;
     } catch (error: any) {
