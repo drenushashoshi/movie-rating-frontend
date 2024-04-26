@@ -6,6 +6,7 @@ import { Login } from "./pages/auth/login";
 import {MovieList} from "./pages/Home/index";
 import RatedPage from "./pages/Ratings/ratings";
 import MovieDetail from "./pages/Home/MovieDetails";
+import SearchPage from './pages/SearchPage/SearchPage';
 
 function App(){
   return (
@@ -18,6 +19,7 @@ function App(){
           <Route path="/auth" element={<Register/>}/>
           <Route path="/auth/Login" element={<Login/>}/>
           <Route path="/ratings" element={<RatedPage/>}/>
+          <Route path="/search" element={<SearchPage/>}/>
         </Routes>
       </Router>
     </div>
