@@ -15,7 +15,7 @@ export interface RatingData {
 
 export const fetchMovieData = async () => {
     try {
-        const res = await fetch(variables.API_URL + 'movies'); // Assuming the endpoint to fetch movie data is '/movies'
+        const res = await fetch(variables.API_URL + 'movies');
 
         if (!res.ok) {
             throw new Error('Failed to fetch movie data');
@@ -33,7 +33,7 @@ export const fetchMovieData = async () => {
 
 export const fetchMovieDetailsByTitle = async (title: string): Promise<MovieData | null> => {
     try {
-        const res = await fetch(`${variables.API_URL}movies/${encodeURIComponent(title)}`); // Adjust the endpoint based on your backend API
+        const res = await fetch(`${variables.API_URL}movies/${encodeURIComponent(title)}`);
 
         if (!res.ok) {
             throw new Error('Failed to fetch movie details');

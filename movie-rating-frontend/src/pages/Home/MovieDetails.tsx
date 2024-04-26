@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useParams } from 'react-router-dom';
-import { fetchMovieDetailsByTitle, addRatingAndCommentToBackend, MovieData, fetchRatingsByUserId, RatingData } from './mutations';
+import { fetchMovieDetailsByTitle, addRatingAndCommentToBackend, MovieData, fetchRatingsByUserId} from './mutations';
 import { Card, Loader, Button, Comment, Form, Header, Grid, Rating, RatingProps } from 'semantic-ui-react';
 import { getUserIdFromToken } from '../../Variables'; // Importing the getUserIdFromToken function
 
