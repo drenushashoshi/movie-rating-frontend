@@ -39,6 +39,7 @@ const SearchPage: React.FC = () => {
       console.error('Error searching movies:', error);
     } finally {
       setLoading(false);
+      setSearchQuery('');
     }
   };
 

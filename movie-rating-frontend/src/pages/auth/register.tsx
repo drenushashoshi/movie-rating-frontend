@@ -7,24 +7,68 @@ export const Register = () => {
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
     const [email, setEmail] = useState('');
-    const [error, setError] = useState(null);
+    const [usernameError, setUsernameError] = useState<string | null>(null);
+    const [emailError, setEmailError] = useState<string | null>(null);
+    const [passwordError, setPasswordError] = useState<string | null>(null);
 
     const { mutate } = useMutation({
         mutationKey: ['register'],
         mutationFn: mutationRegister,
-        onError: (error:any) => {
-            setError(error);
+        onError: (error: any) => {
+            if (error.message === 'Username already taken') {
+                setUsernameError(error.message);
+            }else if(error.message === 'Username is required'){
+                setUsernameError(error.message);
+            } 
+            else{
+                setUsernameError(null);
+                setEmailError(null);
+                setPasswordError('An unexpected error occurred. Please try again later.');
+            }
         },
     });
 
     const handleRegister = async () => {
         try {
-            setError(null);
-            await mutate({ username, password, email });
+            setUsernameError(null);
+            setEmailError(null);
+            setPasswordError(null);
             
-        } catch (error: any) {
-            setError(error);
+            if (!validateUsername(username)) {
+                setUsernameError('Username is required');
+                return;
+            }
+            
+            if (!validateEmail(email)) {
+                setEmailError('Please enter a valid email address');
+                return;
+            }
+
+            if (!validatePassword(password)) {
+                setPasswordError('Password must be at least 6 characters long');
+                return;
+            }
+
+            await mutate({ username, password, email });
+        } catch (error) {
+            console.error('Error during registration:', error);
+                setUsernameError('An unexpected error occurred. Please try again later.');
+                setEmailError(null);
+                setPasswordError(null);
         }
+    };
+
+    const validateUsername = (username: string): boolean => {
+        return !!username;
+    };
+
+    const validateEmail = (email: string): boolean => {
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        return emailRegex.test(email);
+    };
+
+    const validatePassword = (password: string): boolean => {
+        return password.length >= 6;
     };
 
     return (
@@ -42,8 +86,10 @@ export const Register = () => {
                             placeholder="Username"
                             value={username}
                             onChange={(e) => setUsername(e.target.value)}
+                            error={!!usernameError}
                             required
                         />
+                        {usernameError && <Message negative>{usernameError}</Message>}
                         <Form.Input
                             fluid
                             icon="mail"
@@ -52,8 +98,10 @@ export const Register = () => {
                             type="email"
                             value={email}
                             onChange={(e) => setEmail(e.target.value)}
+                            error={!!emailError}
                             required
                         />
+                        {emailError && <Message negative>{emailError}</Message>}
                         <Form.Input
                             fluid
                             icon="lock"
@@ -62,10 +110,17 @@ export const Register = () => {
                             type="password"
                             value={password}
                             onChange={(e) => setPassword(e.target.value)}
+                            error={!!passwordError}
                             required
                         />
-                        {error && <Message negative>{error}</Message>}
-                        <Button disabled={username === "" || email === "" || password === ""} color="violet" size="large" fluid onClick={handleRegister}>
+                        {passwordError && <Message negative>{passwordError}</Message>}
+                        <Button
+                            disabled={username === "" || email === "" || password === ""}
+                            color="violet"
+                            size="large"
+                            fluid
+                            onClick={handleRegister}
+                        >
                             Register
                         </Button>
                     </Segment>

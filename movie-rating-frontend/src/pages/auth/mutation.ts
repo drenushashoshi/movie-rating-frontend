@@ -6,6 +6,15 @@ interface UserCredentials {
     email: string;
 }
 
+interface ErrorMessages {
+    [key: string]: string;
+}
+
+const ERROR_MESSAGES: ErrorMessages = {
+    CONFLICT: 'Username already taken',
+    GENERIC: 'Failed to fetch',
+};
+
 export const mutationRegister = async (credentials: UserCredentials) => {
     try {
         const res = await fetch(variables.API_URL + 'users/register', {
@@ -13,11 +22,22 @@ export const mutationRegister = async (credentials: UserCredentials) => {
             headers: {
                 'Content-Type': 'application/json'
             },
-            body: JSON.stringify(credentials), // Convert credentials object to JSON string
+            body: JSON.stringify(credentials),
         });
 
         if (!res.ok) {
-            throw new Error('Failed to fetch');
+            let errorMessage = ERROR_MESSAGES.GENERIC;
+            if (res.status === 409) {
+                errorMessage = ERROR_MESSAGES.CONFLICT;
+            }
+
+            // Check if response body exists and is in JSON format
+            if (res.headers.get('content-type')?.includes('application/json')) {
+                const errorData = await res.json();
+                errorMessage = errorData.error || errorMessage;
+            }
+
+            throw new Error(errorMessage);
         }
 
         const data = await res.json();
@@ -30,6 +50,8 @@ export const mutationRegister = async (credentials: UserCredentials) => {
         throw error;
     }
 };
+
+
 export const mutationLogin = async (credentials: {username: string, password: string}) => {
     try {
         const res = await fetch(variables.API_URL + 'users/login', {
